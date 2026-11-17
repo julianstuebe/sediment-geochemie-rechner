@@ -35,32 +35,36 @@ const sections = [
           "δ¹⁸O<sub>VSMOW</sub> = 1,03091 · δ¹⁸O<sub>VPDB</sub> + 30,91<br>" +
           "δ¹⁸O<sub>VPDB</sub> = 0,97002 · δ¹⁸O<sub>VSMOW</sub> − 29,98",
         description:
-          "Coplen et al. (1983). VSMOW für Wässer, VPDB für Karbonate (δ¹³C immer vs. VPDB). " +
+          "Coplen et al. (1983). Beide Felder gleich sich automatisch aus: Wert in einem Feld ändern, " +
+          "das andere rechnet sofort mit. VSMOW für Wässer, VPDB für Karbonate (δ¹³C immer vs. VPDB). " +
           "Werte der beiden Skalen nie in einer Gleichung mischen.",
         inputs: [
           {
-            id: "direction",
-            type: "select",
-            label: "Richtung",
-            options: [
-              { value: "vpdb-to-vsmosw", label: "VPDB → VSMOW" },
-              { value: "vsmosw-to-vpdb", label: "VSMOW → VPDB" },
-            ],
+            id: "deltaVsmow",
+            label: "δ¹⁸O<sub>VSMOW</sub>",
+            unit: "‰",
+            placeholder: "z. B. 28,45",
+            value: "0",
           },
           {
-            id: "delta",
-            label: "δ¹⁸O (Ausgangswert)",
+            id: "deltaVpdb",
+            label: "δ¹⁸O<sub>VPDB</sub>",
             unit: "‰",
             placeholder: "z. B. −2,38",
+            value: "-29,98",
           },
         ],
-        compute: (v) =>
-          v.direction === "vpdb-to-vsmosw"
-            ? 1.03091 * v.delta + 30.91
-            : 0.97002 * v.delta - 29.98,
-        resultLabel: "δ¹⁸O (Zielstandard)",
-        resultUnit: "‰",
-        decimals: 2,
+        sync: {
+          a: "deltaVsmow",
+          b: "deltaVpdb",
+          aToB: (v) => 0.97002 * v - 29.98,
+          bToA: (v) => 1.03091 * v + 30.91,
+        },
+        compute: (v) => ({ vsmow: v.deltaVsmow, vpdb: v.deltaVpdb }),
+        results: [
+          { key: "vsmow", label: "δ¹⁸O<sub>VSMOW</sub>", unit: "‰", decimals: 2 },
+          { key: "vpdb", label: "δ¹⁸O<sub>VPDB</sub>", unit: "‰", decimals: 2 },
+        ],
       },
       {
         id: "fractionation-factor",
@@ -238,6 +242,7 @@ function createField(formula, input) {
     inputEl.inputMode = "decimal";
     inputEl.placeholder = input.placeholder || "";
     inputEl.autocomplete = "off";
+    if (input.value !== undefined) inputEl.value = input.value;
   }
   inputEl.id = `${formula.id}-${input.id}`;
 
@@ -274,6 +279,20 @@ function createFormulaCard(formula) {
     const { field, inputEl, def } = createField(formula, input);
     form.appendChild(field);
     inputRefs[input.id] = { el: inputEl, def };
+  }
+
+  if (formula.sync) {
+    const { a, b, aToB, bToA } = formula.sync;
+    const bindSync = (fromId, toId, convert) => {
+      inputRefs[fromId].el.addEventListener("input", () => {
+        const num = parseNumber(inputRefs[fromId].el.value);
+        if (Number.isFinite(num)) {
+          inputRefs[toId].el.value = convert(num).toFixed(2).replace(".", ",");
+        }
+      });
+    };
+    bindSync(a, b, aToB);
+    bindSync(b, a, bToA);
   }
 
   const button = document.createElement("button");
