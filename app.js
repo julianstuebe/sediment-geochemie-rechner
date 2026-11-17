@@ -399,4 +399,34 @@ function render() {
   }
 }
 
-document.addEventListener("DOMContentLoaded", render);
+const PASSWORD_HASH = "4eba3cb90f31abc3ad041ead970996501d799d45fbb52137c86e244716ad7de6";
+const UNLOCK_KEY = "sgc-unlocked";
+
+async function sha256Hex(text) {
+  const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text));
+  return Array.from(new Uint8Array(digest), (b) => b.toString(16).padStart(2, "0")).join("");
+}
+
+function initGate() {
+  const form = document.getElementById("gate-form");
+  if (!form) return;
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const input = document.getElementById("gate-password");
+    const errorEl = document.getElementById("gate-error");
+    const hash = await sha256Hex(input.value);
+    if (hash === PASSWORD_HASH) {
+      sessionStorage.setItem(UNLOCK_KEY, "1");
+      document.documentElement.classList.add("unlocked");
+      input.value = "";
+      errorEl.hidden = true;
+    } else {
+      errorEl.hidden = false;
+    }
+  });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  render();
+  initGate();
+});

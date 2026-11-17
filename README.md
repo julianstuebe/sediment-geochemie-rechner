@@ -45,6 +45,23 @@ In `app.js` einen neuen Eintrag in `sections` anlegen (neue Sektion oder neue Ka
 - `compute(values)` erhält die geparsten Werte (Selects als String) und liefert eine Zahl oder ein Objekt.
 - `resultLabel`/`resultUnit`/`decimals` für ein Ergebnis, `results` (Array mit `key`/`label`/`unit`/`decimals`) für mehrere.
 
+## Passwortschutz (clientseitig)
+
+Vor die Seite ist eine Passwortmaske geschaltet (`#gate` in `index.html`, Logik in `app.js`).
+Die Freischaltung gilt pro Browser-Session (`sessionStorage`).
+
+**Passwort ändern:** SHA-256-Hash des neuen Passworts in `PASSWORD_HASH` in `app.js` eintragen, z. B.:
+
+```bash
+printf '%s' "NEUES_PASSWORT" | sha256sum
+```
+
+Aktuelles Platzhalter-Passwort: `sediment`
+
+Hinweis: rein statische Seite — der Hash liegt im öffentlichen Quelltext. Das schützt nur vor
+zufälligen Besuchern, nicht vor jemandem, der den Quelltext liest. Echter Schutz nur über
+privates Repo + Pages (kostenpflichtiger Plan) oder einen Auth-Proxy.
+
 ## Enthaltene Formeln (Key Equations – Stabile Isotope)
 
 1. δ-Notation: δ = (R_Probe / R_Standard − 1) × 1000 [‰]
