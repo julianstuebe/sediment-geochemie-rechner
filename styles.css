@@ -105,15 +105,18 @@ section.formula-section > h2 {
   color: var(--muted);
 }
 
-.field input {
+.field input,
+.field select {
   padding: 0.55rem 0.7rem;
   font-size: 1rem;
   border: 1px solid var(--border);
   border-radius: 6px;
   width: 100%;
+  background: #ffffff;
 }
 
-.field input:focus {
+.field input:focus,
+.field select:focus {
   outline: 2px solid var(--accent);
   outline-offset: 1px;
   border-color: var(--accent);
