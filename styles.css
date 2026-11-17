@@ -40,20 +40,24 @@ body {
 }
 
 main {
-  max-width: 860px;
+  max-width: 1100px;
   margin: 0 auto;
   padding: 1.5rem 1rem 3rem;
 }
 
 section.formula-section {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem;
   margin-bottom: 2.5rem;
 }
 
 section.formula-section > h2 {
+  grid-column: 1 / -1;
   font-size: 1.35rem;
   border-bottom: 2px solid var(--accent);
   padding-bottom: 0.35rem;
-  margin-bottom: 1rem;
+  margin-bottom: 0.25rem;
 }
 
 .card {
@@ -61,8 +65,13 @@ section.formula-section > h2 {
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 1.25rem 1.5rem;
-  margin-bottom: 1.25rem;
   box-shadow: 0 1px 3px rgba(16, 42, 67, 0.08);
+}
+
+@media (max-width: 900px) {
+  section.formula-section {
+    grid-template-columns: 1fr;
+  }
 }
 
 .card h3 {
