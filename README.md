@@ -56,7 +56,7 @@ Die Freischaltung gilt pro Browser-Session (`sessionStorage`).
 printf '%s' "NEUES_PASSWORT" | sha256sum
 ```
 
-Aktuelles Platzhalter-Passwort: `sediment`
+Das Klartext-Passwort wird absichtlich nicht im Repo abgelegt — nur der Hash.
 
 Hinweis: rein statische Seite — der Hash liegt im öffentlichen Quelltext. Das schützt nur vor
 zufälligen Besuchern, nicht vor jemandem, der den Quelltext liest. Echter Schutz nur über

@@ -399,7 +399,7 @@ function render() {
   }
 }
 
-const PASSWORD_HASH = "4eba3cb90f31abc3ad041ead970996501d799d45fbb52137c86e244716ad7de6";
+const PASSWORD_HASH = "b2901485afd6fab6b55c15e20f6b59707254c97de87cf3cc45d8f40bf4b04c26";
 const UNLOCK_KEY = "sgc-unlocked";
 
 async function sha256Hex(text) {
