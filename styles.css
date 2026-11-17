@@ -1,0 +1,162 @@
+:root {
+  --bg: #f4f6f8;
+  --card-bg: #ffffff;
+  --text: #1c2733;
+  --muted: #5b6b7b;
+  --accent: #0e7c7b;
+  --accent-dark: #0a5f5e;
+  --error: #b3261e;
+  --border: #dde3e8;
+  --radius: 10px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+}
+
+.site-header {
+  background: linear-gradient(135deg, #0e7c7b 0%, #14539a 100%);
+  color: #ffffff;
+  padding: 2rem 1.5rem;
+  text-align: center;
+}
+
+.site-header h1 {
+  margin: 0 0 0.35rem;
+  font-size: 1.8rem;
+}
+
+.subtitle {
+  margin: 0;
+  opacity: 0.9;
+}
+
+main {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 3rem;
+}
+
+section.formula-section {
+  margin-bottom: 2.5rem;
+}
+
+section.formula-section > h2 {
+  font-size: 1.35rem;
+  border-bottom: 2px solid var(--accent);
+  padding-bottom: 0.35rem;
+  margin-bottom: 1rem;
+}
+
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.25rem;
+  box-shadow: 0 1px 3px rgba(16, 42, 67, 0.08);
+}
+
+.card h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.1rem;
+}
+
+.formula-display {
+  font-family: "Cambria Math", Georgia, "Times New Roman", serif;
+  font-size: 1.25rem;
+  font-style: italic;
+  background: #eef6f6;
+  border-left: 4px solid var(--accent);
+  padding: 0.6rem 0.9rem;
+  border-radius: 0 var(--radius) var(--radius) 0;
+  margin: 0 0 0.6rem;
+  overflow-x: auto;
+}
+
+.description {
+  color: var(--muted);
+  font-size: 0.92rem;
+  margin: 0 0 1rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  margin-bottom: 0.9rem;
+}
+
+.field label {
+  font-weight: 600;
+  font-size: 0.92rem;
+}
+
+.field .unit {
+  font-weight: 400;
+  color: var(--muted);
+}
+
+.field input {
+  padding: 0.55rem 0.7rem;
+  font-size: 1rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  width: 100%;
+}
+
+.field input:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+  border-color: var(--accent);
+}
+
+button.calculate {
+  background: var(--accent);
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.6rem 1.4rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+button.calculate:hover {
+  background: var(--accent-dark);
+}
+
+.error {
+  color: var(--error);
+  font-size: 0.9rem;
+  margin: 0.7rem 0 0;
+}
+
+.result {
+  margin: 0.9rem 0 0;
+  padding: 0.7rem 0.9rem;
+  background: #e8f5e9;
+  border-left: 4px solid #2e7d32;
+  border-radius: 0 var(--radius) var(--radius) 0;
+  font-size: 1.05rem;
+}
+
+.result strong {
+  font-family: "Cambria Math", Georgia, serif;
+  font-style: italic;
+}
+
+.site-footer {
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.85rem;
+  padding: 1.5rem 1rem 2rem;
+}
