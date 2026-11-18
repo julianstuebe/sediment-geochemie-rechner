@@ -328,6 +328,27 @@ function createFormulaCard(formula) {
   form.appendChild(errorEl);
   form.appendChild(resultEl);
 
+  const showResult = (result) => {
+    if (formula.results) {
+      resultEl.innerHTML = formula.results
+        .map(
+          (r) =>
+            `<strong>${r.label}</strong> = ${formatResult(result[r.key], r.decimals ?? 3)} ${r.unit}`
+        )
+        .join("<br>");
+      copyText = formula.results
+        .map(
+          (r) =>
+            `${stripTags(r.label)} = ${formatResult(result[r.key], r.decimals ?? 3)} ${r.unit}`
+        )
+        .join("\n");
+    } else {
+      resultEl.innerHTML = `<strong>${formula.resultLabel}</strong> = ${formatResult(result, formula.decimals ?? 3)} ${formula.resultUnit}`;
+      copyText = `${stripTags(formula.resultLabel)} = ${formatResult(result, formula.decimals ?? 3)} ${formula.resultUnit}`;
+    }
+    resultEl.hidden = false;
+  };
+
   form.addEventListener("submit", (event) => {
     event.preventDefault();
     errorEl.hidden = true;
@@ -377,25 +398,7 @@ function createFormulaCard(formula) {
       }
     }
 
-    const result = formula.compute(values);
-    if (formula.results) {
-      resultEl.innerHTML = formula.results
-        .map(
-          (r) =>
-            `<strong>${r.label}</strong> = ${formatResult(result[r.key], r.decimals ?? 3)} ${r.unit}`
-        )
-        .join("<br>");
-      copyText = formula.results
-        .map(
-          (r) =>
-            `${stripTags(r.label)} = ${formatResult(result[r.key], r.decimals ?? 3)} ${r.unit}`
-        )
-        .join("\n");
-    } else {
-      resultEl.innerHTML = `<strong>${formula.resultLabel}</strong> = ${formatResult(result, formula.decimals ?? 3)} ${formula.resultUnit}`;
-      copyText = `${stripTags(formula.resultLabel)} = ${formatResult(result, formula.decimals ?? 3)} ${formula.resultUnit}`;
-    }
-    resultEl.hidden = false;
+    showResult(formula.compute(values));
   });
 
   copyButton.addEventListener("click", async () => {
@@ -419,6 +422,49 @@ function createFormulaCard(formula) {
       copyButton.textContent = "Kopieren";
     }, 1500);
   });
+
+  if (formula.sync) {
+    button.style.display = "none";
+    const liveUpdate = () => {
+      const values = {};
+      for (const [id, ref] of Object.entries(inputRefs)) {
+        if (ref.def.type === "select") {
+          values[id] = ref.el.value;
+          continue;
+        }
+        const raw = ref.el.value;
+        if (raw.trim() === "") {
+          if (ref.def.optional) {
+            values[id] = ref.def.default;
+            continue;
+          }
+          resultEl.hidden = true;
+          errorEl.hidden = true;
+          copyText = null;
+          return;
+        }
+        const num = parseNumber(raw);
+        if (!Number.isFinite(num) || (ref.def.nonZero && num === 0)) {
+          resultEl.hidden = true;
+          errorEl.hidden = true;
+          copyText = null;
+          return;
+        }
+        values[id] = num;
+      }
+      if (formula.validate && formula.validate(values)) {
+        resultEl.hidden = true;
+        copyText = null;
+        return;
+      }
+      errorEl.hidden = true;
+      showResult(formula.compute(values));
+    };
+    for (const ref of Object.values(inputRefs)) {
+      ref.el.addEventListener("input", liveUpdate);
+    }
+    liveUpdate();
+  }
 
   card.appendChild(form);
   return card;

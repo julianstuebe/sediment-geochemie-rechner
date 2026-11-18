@@ -18,7 +18,7 @@ Optional als GitHub Pages veröffentlichen (Repo → Settings → Pages).
 ## Funktionen
 
 - Jede Formelkarte hat einen **Kopieren-Button** fürs Ergebnis (Klartext, bei Mehrfach-Ergebnissen zeilenweise; mit Fallback ohne Clipboard-API)
-- Formel 2: VSMOW-/VPDB-Felder synchronisieren sich live (`sync` in der Formel-Definition)
+- Formel 2: VSMOW-/VPDB-Felder synchronisieren sich live (`sync` in der Formel-Definition) — bei `sync`-Karten rechnet die Seite sofort mit und der Berechnen-Button wird ausgeblendet
 - Karten im Zweier-Raster, Felder pro Karte zweispaltig (mobil jeweils einspaltig)
 
 ## Neue Formel hinzufügen
