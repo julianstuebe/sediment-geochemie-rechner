@@ -29,6 +29,45 @@ const sections = [
         decimals: 3,
       },
       {
+        id: "delta-r-conversion",
+        title: "1b · Umrechnung δ ↔ R (mit festem Standard)",
+        formula:
+          "R<sub>Probe</sub> = ( δ/1000 + 1 ) · R<sub>Standard</sub><br>" +
+          "δ = ( R<sub>Probe</sub> / R<sub>Standard</sub> − 1 ) × 1000 [‰]",
+        description:
+          "Standard einmal festlegen (z. B. R<sub>VPDB</sub> = 0,0111802 für ¹³C/¹²C, R<sub>VSMOW</sub> = 0,0020052 für ¹⁸O/¹⁶O). " +
+          "δ- und R-Feld synchronisieren sich live; Änderung des Standards rechnet R neu.",
+        inputs: [
+          {
+            id: "rStandard",
+            label: "R<sub>Standard</sub> (festlegen)",
+            placeholder: "z. B. 0,0111802",
+            nonZero: true,
+            value: "0,0111802",
+          },
+          { id: "delta", label: "δ", unit: "‰", placeholder: "z. B. −5", value: "0", decimals: 2 },
+          {
+            id: "rSample",
+            label: "R<sub>Probe</sub>",
+            placeholder: "wird automatisch ergänzt",
+            value: "0,0111802",
+            decimals: 8,
+          },
+        ],
+        sync: {
+          a: "delta",
+          b: "rSample",
+          aToB: (v, vals) => (v / 1000 + 1) * vals.rStandard,
+          bToA: (v, vals) => (v / vals.rStandard - 1) * 1000,
+          refreshFrom: ["rStandard"],
+        },
+        compute: (v) => ({ delta: v.delta, r: v.rSample }),
+        results: [
+          { key: "delta", label: "δ", unit: "‰", decimals: 2 },
+          { key: "r", label: "R<sub>Probe</sub>", unit: "", decimals: 8 },
+        ],
+      },
+      {
         id: "standards-conversion",
         title: "2 · Standard-Konvertierung δ¹⁸O (VPDB ↔ VSMOW)",
         formula:
@@ -287,16 +326,56 @@ function createFormulaCard(formula) {
 
   if (formula.sync) {
     const { a, b, aToB, bToA } = formula.sync;
+
+    const collectNumeric = () => {
+      const vals = {};
+      for (const [id, ref] of Object.entries(inputRefs)) {
+        if (ref.def.type === "select") {
+          vals[id] = ref.el.value;
+          continue;
+        }
+        const raw = ref.el.value;
+        if (raw.trim() === "") {
+          if (ref.def.optional) {
+            vals[id] = ref.def.default;
+            continue;
+          }
+          return null;
+        }
+        const n = parseNumber(raw);
+        if (!Number.isFinite(n)) return null;
+        vals[id] = n;
+      }
+      return vals;
+    };
+
+    const formatSync = (n, toId) => {
+      if (!Number.isFinite(n)) return null;
+      const dec = inputRefs[toId].def.decimals ?? 2;
+      return n.toFixed(dec).replace(".", ",");
+    };
+
     const bindSync = (fromId, toId, convert) => {
       inputRefs[fromId].el.addEventListener("input", () => {
         const num = parseNumber(inputRefs[fromId].el.value);
-        if (Number.isFinite(num)) {
-          inputRefs[toId].el.value = convert(num).toFixed(2).replace(".", ",");
-        }
+        if (!Number.isFinite(num)) return;
+        const vals = collectNumeric();
+        if (!vals) return;
+        const out = formatSync(convert(num, vals), toId);
+        if (out !== null) inputRefs[toId].el.value = out;
       });
     };
     bindSync(a, b, aToB);
     bindSync(b, a, bToA);
+
+    for (const fid of formula.sync.refreshFrom || []) {
+      inputRefs[fid].el.addEventListener("input", () => {
+        const vals = collectNumeric();
+        if (!vals || typeof vals[a] !== "number") return;
+        const out = formatSync(aToB(vals[a], vals), b);
+        if (out !== null) inputRefs[b].el.value = out;
+      });
+    }
   }
 
   const button = document.createElement("button");
