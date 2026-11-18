@@ -1,12 +1,13 @@
 :root {
-  --bg: #f4f6f8;
+  --bg: #f8f6fb;
   --card-bg: #ffffff;
-  --text: #1c2733;
-  --muted: #5b6b7b;
-  --accent: #0e7c7b;
-  --accent-dark: #0a5f5e;
-  --error: #b3261e;
-  --border: #dde3e8;
+  --text: #2b2440;
+  --muted: #6f6880;
+  --accent: #7e68b0;
+  --accent-dark: #64519a;
+  --accent-soft: #c98bb4;
+  --error: #b03a5b;
+  --border: #e7e1ef;
   --radius: 10px;
 }
 
@@ -23,7 +24,7 @@ body {
 }
 
 .site-header {
-  background: linear-gradient(135deg, #0e7c7b 0%, #14539a 100%);
+  background: linear-gradient(135deg, #c98bb4 0%, #7e68b0 100%);
   color: #ffffff;
   padding: 2rem 1.5rem;
   text-align: center;
@@ -83,8 +84,8 @@ section.formula-section > h2 {
   font-family: "Cambria Math", Georgia, "Times New Roman", serif;
   font-size: 1.25rem;
   font-style: italic;
-  background: #eef6f6;
-  border-left: 4px solid var(--accent);
+  background: #f4eef9;
+  border-left: 4px solid var(--accent-soft);
   padding: 0.6rem 0.9rem;
   border-radius: 0 var(--radius) var(--radius) 0;
   margin: 0 0 0.6rem;
@@ -174,8 +175,8 @@ button.calculate:hover {
 .result {
   margin: 0.9rem 0 0;
   padding: 0.7rem 0.9rem;
-  background: #e8f5e9;
-  border-left: 4px solid #2e7d32;
+  background: #f1eaf8;
+  border-left: 4px solid var(--accent);
   border-radius: 0 var(--radius) var(--radius) 0;
   font-size: 1.05rem;
 }
@@ -200,7 +201,7 @@ button.calculate:hover {
   align-items: center;
   justify-content: center;
   padding: 1rem;
-  background: linear-gradient(135deg, #0e7c7b 0%, #14539a 100%);
+  background: linear-gradient(135deg, #c98bb4 0%, #7e68b0 100%);
 }
 
 html.unlocked #gate {
