@@ -139,10 +139,30 @@ form {
   align-items: start;
 }
 
-form > button.calculate,
+form > .button-row,
 form > .error,
 form > .result {
   grid-column: 1 / -1;
+}
+
+.button-row {
+  display: flex;
+  gap: 0.6rem;
+}
+
+button.copy {
+  background: transparent;
+  color: var(--accent-dark);
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  padding: 0.6rem 1.1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+button.copy:hover {
+  background: #f1eaf8;
 }
 
 @media (max-width: 600px) {

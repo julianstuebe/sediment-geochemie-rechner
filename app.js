@@ -211,6 +211,10 @@ function parseNumber(raw) {
   return parseFloat(String(raw).trim().replace(",", "."));
 }
 
+function stripTags(html) {
+  return html.replace(/<[^>]*>/g, "");
+}
+
 function formatResult(value, decimals) {
   return value.toLocaleString("de-DE", {
     minimumFractionDigits: decimals,
@@ -299,7 +303,17 @@ function createFormulaCard(formula) {
   button.type = "submit";
   button.className = "calculate";
   button.textContent = "Berechnen";
-  form.appendChild(button);
+
+  const copyButton = document.createElement("button");
+  copyButton.type = "button";
+  copyButton.className = "copy";
+  copyButton.textContent = "Kopieren";
+
+  const buttonRow = document.createElement("div");
+  buttonRow.className = "button-row";
+  buttonRow.appendChild(button);
+  buttonRow.appendChild(copyButton);
+  form.appendChild(buttonRow);
 
   const errorEl = document.createElement("p");
   errorEl.className = "error";
@@ -309,6 +323,8 @@ function createFormulaCard(formula) {
   resultEl.className = "result";
   resultEl.hidden = true;
 
+  let copyText = null;
+
   form.appendChild(errorEl);
   form.appendChild(resultEl);
 
@@ -316,6 +332,7 @@ function createFormulaCard(formula) {
     event.preventDefault();
     errorEl.hidden = true;
     resultEl.hidden = true;
+    copyText = null;
 
     const values = {};
     for (const [id, ref] of Object.entries(inputRefs)) {
@@ -368,10 +385,39 @@ function createFormulaCard(formula) {
             `<strong>${r.label}</strong> = ${formatResult(result[r.key], r.decimals ?? 3)} ${r.unit}`
         )
         .join("<br>");
+      copyText = formula.results
+        .map(
+          (r) =>
+            `${stripTags(r.label)} = ${formatResult(result[r.key], r.decimals ?? 3)} ${r.unit}`
+        )
+        .join("\n");
     } else {
       resultEl.innerHTML = `<strong>${formula.resultLabel}</strong> = ${formatResult(result, formula.decimals ?? 3)} ${formula.resultUnit}`;
+      copyText = `${stripTags(formula.resultLabel)} = ${formatResult(result, formula.decimals ?? 3)} ${formula.resultUnit}`;
     }
     resultEl.hidden = false;
+  });
+
+  copyButton.addEventListener("click", async () => {
+    if (!copyText) {
+      errorEl.textContent = "Bitte zuerst berechnen.";
+      errorEl.hidden = false;
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(copyText);
+    } catch {
+      const ta = document.createElement("textarea");
+      ta.value = copyText;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      document.body.removeChild(ta);
+    }
+    copyButton.textContent = "Kopiert ✓";
+    setTimeout(() => {
+      copyButton.textContent = "Kopieren";
+    }, 1500);
   });
 
   card.appendChild(form);

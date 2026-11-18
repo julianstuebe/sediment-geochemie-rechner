@@ -11,9 +11,15 @@ Optional als GitHub Pages veröffentlichen (Repo → Settings → Pages).
 
 ## Aufbau
 
-- `index.html` — Grundgerüst der Seite
-- `styles.css` — Gestaltung
-- `app.js` — Formel-Registry (`sections`) und Rendering-Logik
+- `index.html` — Grundgerüst der Seite (inkl. Passwortmaske `#gate`)
+- `styles.css` — Gestaltung (Farben zentral in `:root`)
+- `app.js` — Formel-Registry (`sections`), Rendering, Passwort-Gate
+
+## Funktionen
+
+- Jede Formelkarte hat einen **Kopieren-Button** fürs Ergebnis (Klartext, bei Mehrfach-Ergebnissen zeilenweise; mit Fallback ohne Clipboard-API)
+- Formel 2: VSMOW-/VPDB-Felder synchronisieren sich live (`sync` in der Formel-Definition)
+- Karten im Zweier-Raster, Felder pro Karte zweispaltig (mobil jeweils einspaltig)
 
 ## Neue Formel hinzufügen
 
