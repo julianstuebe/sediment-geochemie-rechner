@@ -244,6 +244,89 @@ const sections = [
       },
     ],
   },
+  {
+    id: "paleotemperatur-lecture2",
+    title: "Paleotemperatur – Lecture 2",
+    formulas: [
+      {
+        id: "aa-paleotemp",
+        title: "L2-1 · Calcit-Paläothermometer (Anderson & Arthur 1983)",
+        formula:
+          "T(°C) = 16,0 − 4,14 · (δ<sub>c</sub> − δ<sub>w</sub>) + 0,13 · (δ<sub>c</sub> − δ<sub>w</sub>)²",
+        description:
+          "δ_c = δ¹⁸O des Calcits, δ_w = δ¹⁸O des Wassers — beide auf derselben Skala (VPDB/VSMOW vorher umrechnen, siehe Formel 2). " +
+          "Vorzeichen in den Klammern beibehalten; Klammer quadrieren, bevor mit 0,13 multipliziert wird.",
+        inputs: [
+          { id: "deltaC", label: "δ<sub>c</sub> (Calcit)", unit: "‰", placeholder: "z. B. −2" },
+          { id: "deltaW", label: "δ<sub>w</sub> (Wasser)", unit: "‰", placeholder: "z. B. −1" },
+        ],
+        compute: (v) => {
+          const d = v.deltaC - v.deltaW;
+          return 16.0 - 4.14 * d + 0.13 * d * d;
+        },
+        resultLabel: "T",
+        resultUnit: "°C",
+        decimals: 2,
+      },
+      {
+        id: "aa-water-delta",
+        title: "L2-2 · Dieselbe Gleichung nach dem Wasser aufgelöst",
+        formula:
+          "(δ<sub>c</sub> − δ<sub>w</sub>) = [ 4,14 − √( 4,14² − 0,52 · (16,0 − T) ) ] / 0,26 &nbsp; (T in °C)",
+        description:
+          "Umgestellt nach (δ_c − δ_w). Optional δ_c angeben, dann wird δ_w = δ_c − (δ_c − δ_w) mit ausgegeben.",
+        inputs: [
+          { id: "temp", label: "T", unit: "°C", placeholder: "z. B. 25" },
+          {
+            id: "deltaC",
+            label: "δ<sub>c</sub> (optional, ergibt δ<sub>w</sub>)",
+            unit: "‰",
+            placeholder: "z. B. −2",
+            optional: true,
+            default: null,
+          },
+        ],
+        validate: (v) => {
+          const disc = 4.14 * 4.14 - 0.52 * (16.0 - v.temp);
+          return disc < 0
+            ? "Diskriminante negativ — T liegt außerhalb des gültigen Bereichs (ca. T ≥ −17 °C)."
+            : null;
+        },
+        compute: (v) => {
+          const disc = 4.14 * 4.14 - 0.52 * (16.0 - v.temp);
+          const diff = (4.14 - Math.sqrt(disc)) / 0.26;
+          const out = { diff };
+          if (v.deltaC !== null && v.deltaC !== undefined) out.deltaW = v.deltaC - diff;
+          return out;
+        },
+        results: [
+          { key: "diff", label: "δ<sub>c</sub> − δ<sub>w</sub>", unit: "‰", decimals: 2 },
+          { key: "deltaW", label: "δ<sub>w</sub> (bei angegebenem δ<sub>c</sub>)", unit: "‰", decimals: 2 },
+        ],
+      },
+      {
+        id: "clumped-isotope",
+        title: "L2-3 · Clumped-Isotope-Kalibration (Anderson et al. 2021)",
+        formula:
+          "Δ<sub>47</sub> = 0,0391 · 10⁶/T² + 0,154 &nbsp;→&nbsp; T = √[ 0,0391 · 10⁶ / (Δ<sub>47</sub> − 0,154) ]",
+        description:
+          "T kommt in Kelvin heraus — vor Verwendung in L2-2 erst 273,15 abziehen.",
+        inputs: [
+          { id: "delta47", label: "Δ<sub>47</sub>", unit: "‰", placeholder: "z. B. 0,52" },
+        ],
+        validate: (v) =>
+          v.delta47 <= 0.154 ? "Δ47 muss größer als 0,154 ‰ sein." : null,
+        compute: (v) => {
+          const tK = Math.sqrt(0.0391e6 / (v.delta47 - 0.154));
+          return { tK, tC: tK - 273.15 };
+        },
+        results: [
+          { key: "tK", label: "T", unit: "K", decimals: 2 },
+          { key: "tC", label: "T", unit: "°C", decimals: 2 },
+        ],
+      },
+    ],
+  },
 ];
 
 function parseNumber(raw) {
@@ -409,13 +492,14 @@ function createFormulaCard(formula) {
 
   const showResult = (result) => {
     if (formula.results) {
-      resultEl.innerHTML = formula.results
+      const shown = formula.results.filter((r) => result[r.key] !== undefined);
+      resultEl.innerHTML = shown
         .map(
           (r) =>
             `<strong>${r.label}</strong> = ${formatResult(result[r.key], r.decimals ?? 3)} ${r.unit}`
         )
         .join("<br>");
-      copyText = formula.results
+      copyText = shown
         .map(
           (r) =>
             `${stripTags(r.label)} = ${formatResult(result[r.key], r.decimals ?? 3)} ${r.unit}`
