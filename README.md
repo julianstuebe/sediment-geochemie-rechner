@@ -83,3 +83,9 @@ privates Repo + Pages (kostenpflichtiger Plan) oder einen Auth-Proxy.
 - L2-1 Calcit-Paläothermometer (Anderson & Arthur 1983): T = 16,0 − 4,14·(δ_c−δ_w) + 0,13·(δ_c−δ_w)²
 - L2-2 nach Wasser aufgelöst: (δ_c−δ_w) = [4,14 − √(4,14² − 0,52·(16,0−T))]/0,26; optional δ_w über δ_c
 - L2-3 Clumped Isotopes (Anderson et al. 2021): T = √[0,0391·10⁶/(Δ47 − 0,154)] in K, zusätzlich °C
+
+### Uran-Isotope (²³⁸U) – Redox / Massenbilanz
+
+- U-1 Massenbilanz im Gleichgewicht: δ²³⁸U_input = f_anox·δ_anoxic + (1−f_anox)·δ_other (Brennecka et al. 2011)
+- U-2 umgestellt: f_anox = (δ_input − 0,10 − δ_Meerwasser)/0,40, Offsets optional anpassbar
+- U-3 Meerwasser aus Kalkstein (live synchronisiert): δ_Meerwasser = δ_Kalkstein − offset (0,2–0,4 ‰)
