@@ -112,7 +112,7 @@ const sections = [
           "α<sub>A−B</sub> = R<sub>A</sub>/R<sub>B</sub> = (1000 + δ<sub>A</sub>)/(1000 + δ<sub>B</sub>)<br>" +
           "ε<sub>A−B</sub> = (α − 1) × 1000 &nbsp;·&nbsp; Δ<sub>A−B</sub> = δ<sub>A</sub> − δ<sub>B</sub>",
         description:
-          "Reihenfolge beachten: α<sub>Wasser–Calcit</sub> = 1 / α<sub>Calcit–Wasser</sub>. " +
+          "Reihenfolge beachten: α<sub>Water–Calcit</sub> = 1 / α<sub>Calcit–Water</sub>. " +
           "Für kleine Fraktionierungen (δ nahe 0 ‰) gilt Δ ≈ ε ≈ 10³ ln α.",
         inputs: [
           { id: "deltaA", label: "δ<sub>A</sub>", unit: "‰", placeholder: "z. B. 28,45" },
@@ -138,16 +138,16 @@ const sections = [
       },
       {
         id: "calcite-water-thermometer",
-        title: "4 · Calcit–Wasser-Thermometer (Kim & O'Neil 1997)",
-        formula: "10³ ln α<sub>Calcit–Wasser</sub> = 18,03 · (10³/T) − 32,42 &nbsp; (T in K)",
+        title: "4 · Calcit–Water-Thermometer (Kim & O'Neil 1997)",
+        formula: "10³ ln α<sub>Calcit–Water</sub> = 18,03 · (10³/T) − 32,42 &nbsp; (T in K)",
         description:
           "Kalibriert für 10–40 °C; T wird aus °C umgerechnet. " +
-          "δ<sub>Calcit</sub> = α · (δ<sub>Wasser</sub> + 1000) − 1000.",
+          "δ<sub>Calcit</sub> = α · (δ<sub>Water</sub> + 1000) − 1000.",
         inputs: [
           { id: "tempC", label: "T (Temperatur)", unit: "°C", placeholder: "z. B. 25" },
           {
             id: "deltaWater",
-            label: "δ¹⁸O<sub>Wasser</sub> (optional, Standard: 0 ‰ VSMOW)",
+            label: "δ¹⁸O<sub>Water</sub> (optional, Standard: 0 ‰ VSMOW)",
             unit: "‰",
             placeholder: "z. B. 0",
             optional: true,
@@ -167,8 +167,8 @@ const sections = [
           };
         },
         results: [
-          { key: "x", label: "10³ ln α<sub>Calcit–Wasser</sub>", unit: "‰", decimals: 2 },
-          { key: "alpha", label: "α<sub>Calcit–Wasser</sub>", unit: "", decimals: 5 },
+          { key: "x", label: "10³ ln α<sub>Calcit–Water</sub>", unit: "‰", decimals: 2 },
+          { key: "alpha", label: "α<sub>Calcit–Water</sub>", unit: "", decimals: 5 },
           { key: "deltaCalcite", label: "δ¹⁸O<sub>Calcit</sub>", unit: "‰ VSMOW", decimals: 2 },
         ],
       },
@@ -228,7 +228,7 @@ const sections = [
       },
       {
         id: "meteoric-water-line",
-        title: "6c · Meteorische Wasserlinie (GMWL) & Deuterium-Exzess",
+        title: "6c · Meteorische Waterline (GMWL) & Deuterium-Exzess",
         formula: "δ²H = 8 · δ¹⁸O + 10 &nbsp;·&nbsp; d = δ²H − 8 · δ¹⁸O",
         description:
           "Global Meteoric Water Line: Craig (1961); Deuterium-Exzess: Dansgaard (1964).",
@@ -254,11 +254,11 @@ const sections = [
         formula:
           "T(°C) = 16,0 − 4,14 · (δ<sub>c</sub> − δ<sub>w</sub>) + 0,13 · (δ<sub>c</sub> − δ<sub>w</sub>)²",
         description:
-          "δ_c = δ¹⁸O des Calcits, δ_w = δ¹⁸O des Wassers — beide auf derselben Skala (VPDB/VSMOW vorher umrechnen, siehe Formel 2). " +
+          "δ_c = δ¹⁸O des Calcits, δ_w = δ¹⁸O von Water — beide auf derselben Skala (VPDB/VSMOW vorher umrechnen, siehe Formel 2). " +
           "Vorzeichen in den Klammern beibehalten; Klammer quadrieren, bevor mit 0,13 multipliziert wird.",
         inputs: [
           { id: "deltaC", label: "δ<sub>c</sub> (Calcit)", unit: "‰", placeholder: "z. B. −2" },
-          { id: "deltaW", label: "δ<sub>w</sub> (Wasser)", unit: "‰", placeholder: "z. B. −1" },
+          { id: "deltaW", label: "δ<sub>w</sub> (Water)", unit: "‰", placeholder: "z. B. −1" },
         ],
         compute: (v) => {
           const d = v.deltaC - v.deltaW;
@@ -270,7 +270,7 @@ const sections = [
       },
       {
         id: "aa-water-delta",
-        title: "L2-2 · Dieselbe Gleichung nach dem Wasser aufgelöst",
+        title: "L2-2 · Dieselbe Gleichung nach dem Water aufgelöst",
         formula:
           "(δ<sub>c</sub> − δ<sub>w</sub>) = [ 4,14 − √( 4,14² − 0,52 · (16,0 − T) ) ] / 0,26 &nbsp; (T in °C)",
         description:

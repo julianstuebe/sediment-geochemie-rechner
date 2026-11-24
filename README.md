@@ -74,14 +74,14 @@ privates Repo + Pages (kostenpflichtiger Plan) oder einen Auth-Proxy.
 1b. δ ↔ R bei festem Standard (live synchronisierte Felder): R = (δ/1000 + 1)·R_Standard
 2. Standard-Konvertierung δ¹⁸O: VPDB ↔ VSMOW (Coplen et al. 1983) — VSMOW- und VPDB-Feld synchronisieren sich automatisch
 3. Fraktionierungsfaktor: α = (1000+δ_A)/(1000+δ_B), ε = (α−1)×1000, Δ = δ_A−δ_B
-4. Calcit–Wasser-Thermometer: 10³ ln α = 18,03·(10³/T) − 32,42 (Kim & O'Neil 1997)
+4. Calcit–Water-Thermometer: 10³ ln α = 18,03·(10³/T) − 32,42 (Kim & O'Neil 1997)
 5. Massenbilanz (Mischung): δ_mix = Σ f_i·δ_i, f_i = V_i/ΣV
-6. Rayleigh-Destillation (R_Dampf, δ_Regen) & meteorische Wasserlinie (δ²H = 8·δ¹⁸O + 10, d = δ²H − 8·δ¹⁸O)
+6. Rayleigh-Destillation (R_Dampf, δ_Regen) & meteorische Waterline (δ²H = 8·δ¹⁸O + 10, d = δ²H − 8·δ¹⁸O)
 
 ### Paleotemperatur – Lecture 2
 
 - L2-1 Calcit-Paläothermometer (Anderson & Arthur 1983): T = 16,0 − 4,14·(δ_c−δ_w) + 0,13·(δ_c−δ_w)²
-- L2-2 nach Wasser aufgelöst: (δ_c−δ_w) = [4,14 − √(4,14² − 0,52·(16,0−T))]/0,26; optional δ_w über δ_c
+- L2-2 nach Water aufgelöst: (δ_c−δ_w) = [4,14 − √(4,14² − 0,52·(16,0−T))]/0,26; optional δ_w über δ_c
 - L2-3 Clumped Isotopes (Anderson et al. 2021): T = √[0,0391·10⁶/(Δ47 − 0,154)] in K, zusätzlich °C
 
 ### Uran-Isotope (²³⁸U) – Redox / Massenbilanz
