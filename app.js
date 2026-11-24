@@ -338,7 +338,7 @@ const sections = [
           "δ²³⁸U<sub>input</sub> = f<sub>anox</sub> · δ²³⁸U<sub>anoxic</sub> + (1 − f<sub>anox</sub>) · δ²³⁸U<sub>other</sub>",
         description:
           "Steady state. Beispielwerte aus der Arbeit: Fluss-Input δ²³⁸U_input = −0,30 ‰; " +
-          "anoxische Senken 0,50 ‰ schwerer als Meerwasser, alle anderen Senken 0,10 ‰ schwerer.",
+          "anoxische Senken 0,50 ‰ schwerer als Seawater, alle anderen Senken 0,10 ‰ schwerer.",
         inputs: [
           { id: "fAnox", label: "f<sub>anox</sub> (Anteil anoxische Senken)", placeholder: "z. B. 0,1" },
           { id: "dAnoxic", label: "δ²³⁸U<sub>anoxic</sub>", unit: "‰", placeholder: "z. B. 0,20" },
@@ -355,13 +355,13 @@ const sections = [
         id: "u-fanox",
         title: "U-2 · f_anox umgestellt (Werte aus Brennecka et al. 2011)",
         formula:
-          "f<sub>anox</sub> = ( δ²³⁸U<sub>input</sub> − 0,10 − δ²³⁸U<sub>Meerwasser</sub> ) / 0,40",
+          "f<sub>anox</sub> = ( δ²³⁸U<sub>input</sub> − 0,10 − δ²³⁸U<sub>Seawater</sub> ) / 0,40",
         description:
-          "Umgestellt mit den Offsets der Arbeit: anoxische Senken +0,50 ‰, andere Senken +0,10 ‰ gegenüber Meerwasser (Differenz 0,40). " +
+          "Umgestellt mit den Offsets der Arbeit: anoxische Senken +0,50 ‰, andere Senken +0,10 ‰ gegenüber Seawater (Differenz 0,40). " +
           "Beide Offsets optional anpassbar.",
         inputs: [
           { id: "dInput", label: "δ²³⁸U<sub>input</sub> (Fluss)", unit: "‰", placeholder: "z. B. −0,30", value: "-0,30" },
-          { id: "dSea", label: "δ²³⁸U<sub>Meerwasser</sub>", unit: "‰", placeholder: "z. B. −0,30", value: "-0,30" },
+          { id: "dSea", label: "δ²³⁸U<sub>Seawater</sub>", unit: "‰", placeholder: "z. B. −0,30", value: "-0,30" },
           { id: "offAnox", label: "Offset anoxisch (optional)", unit: "‰", placeholder: "0,50", optional: true, default: 0.5 },
           { id: "offOther", label: "Offset andere Senken (optional)", unit: "‰", placeholder: "0,10", optional: true, default: 0.1 },
         ],
@@ -376,14 +376,14 @@ const sections = [
       },
       {
         id: "u-seawater-limestone",
-        title: "U-3 · Meerwasser aus Kalkstein (diagenetischer Offset)",
-        formula: "δ²³⁸U<sub>Meerwasser</sub> = δ²³⁸U<sub>Kalkstein</sub> − offset",
+        title: "U-3 · Seawater aus Limestone (diagenetischer Offset)",
+        formula: "δ²³⁸U<sub>Seawater</sub> = δ²³⁸U<sub>Limestone</sub> − offset",
         description:
-          "Der Kalkstein ist nicht das Meerwasser. Diagenetischer Offset typisch 0,2–0,4 ‰. " +
-          "Kalkstein- und Meerwasser-Feld synchronisieren sich live; Änderung des Offsets rechnet neu.",
+          "Der Limestone ist nicht das Seawater. Diagenetischer Offset typisch 0,2–0,4 ‰. " +
+          "Limestone- und Seawater-Feld synchronisieren sich live; Änderung des Offsets rechnet neu.",
         inputs: [
-          { id: "dLimestone", label: "δ²³⁸U<sub>Kalkstein</sub>", unit: "‰", placeholder: "z. B. −0,30", value: "-0,30", decimals: 2 },
-          { id: "dSea", label: "δ²³⁸U<sub>Meerwasser</sub>", unit: "‰", placeholder: "wird ergänzt", value: "-0,60", decimals: 2 },
+          { id: "dLimestone", label: "δ²³⁸U<sub>Limestone</sub>", unit: "‰", placeholder: "z. B. −0,30", value: "-0,30", decimals: 2 },
+          { id: "dSea", label: "δ²³⁸U<sub>Seawater</sub>", unit: "‰", placeholder: "wird ergänzt", value: "-0,60", decimals: 2 },
           { id: "offset", label: "offset (diagenetisch)", unit: "‰", placeholder: "z. B. 0,30", value: "0,30" },
         ],
         sync: {
@@ -395,8 +395,8 @@ const sections = [
         },
         compute: (v) => ({ sea: v.dSea, lime: v.dLimestone }),
         results: [
-          { key: "sea", label: "δ²³⁸U<sub>Meerwasser</sub>", unit: "‰", decimals: 2 },
-          { key: "lime", label: "δ²³⁸U<sub>Kalkstein</sub>", unit: "‰", decimals: 2 },
+          { key: "sea", label: "δ²³⁸U<sub>Seawater</sub>", unit: "‰", decimals: 2 },
+          { key: "lime", label: "δ²³⁸U<sub>Limestone</sub>", unit: "‰", decimals: 2 },
         ],
       },
     ],

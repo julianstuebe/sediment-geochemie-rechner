@@ -87,5 +87,5 @@ privates Repo + Pages (kostenpflichtiger Plan) oder einen Auth-Proxy.
 ### Uran-Isotope (²³⁸U) – Redox / Massenbilanz
 
 - U-1 Massenbilanz im Gleichgewicht: δ²³⁸U_input = f_anox·δ_anoxic + (1−f_anox)·δ_other (Brennecka et al. 2011)
-- U-2 umgestellt: f_anox = (δ_input − 0,10 − δ_Meerwasser)/0,40, Offsets optional anpassbar
-- U-3 Meerwasser aus Kalkstein (live synchronisiert): δ_Meerwasser = δ_Kalkstein − offset (0,2–0,4 ‰)
+- U-2 umgestellt: f_anox = (δ_input − 0,10 − δ_Seawater)/0,40, Offsets optional anpassbar
+- U-3 Seawater aus Limestone (live synchronisiert): δ_Seawater = δ_Limestone − offset (0,2–0,4 ‰)
